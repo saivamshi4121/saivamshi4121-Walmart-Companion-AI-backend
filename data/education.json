@@ -1,0 +1,12 @@
+[
+  {
+    "productId": 2,
+    "message": "This is a better nutritional choice!",
+    "swapFor": 3
+  },
+  {
+    "productId": 1,
+    "message": "Eco-friendly alternative available.",
+    "swapFor": 4
+  }
+] 

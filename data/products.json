@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Smartphone", "price": 699.99, "image": "/images/smartphone.jpg", "tags": ["eco-friendly"] },
+  { "id": 2, "name": "Wireless Headphones", "price": 199.99, "image": "/images/headphones.jpg", "tags": ["better-choice"] },
+  { "id": 3, "name": "Reusable Water Bottle", "price": 24.99, "image": "/images/bottle.jpg", "tags": ["eco-friendly", "better-choice"] },
+  { "id": 4, "name": "LED Bulb", "price": 9.99, "image": "/images/bulb.jpg", "tags": ["eco-friendly"] }
+]   

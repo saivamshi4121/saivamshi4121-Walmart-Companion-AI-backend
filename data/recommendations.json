@@ -1,0 +1,4 @@
+[
+  { "customerId": 1, "recommended": [2, 3] },
+  { "customerId": 2, "recommended": [1, 4] }
+] 
