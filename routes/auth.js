@@ -55,4 +55,49 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Get user profile by email
+router.get('/profile', async (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ message: 'Email required' });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({
+      email: user.email,
+      name: user.name || '',
+      phone: user.phone || '',
+      address: user.address || '',
+      preferences: user.preferences || {
+        notifications: { email: true, sms: false, push: true },
+        privacy: { shareData: false, marketing: true }
+      },
+      memberSince: user.createdAt || '',
+      totalOrders: user.totalOrders || 0,
+      totalSpent: user.totalSpent || 0,
+      loyaltyPoints: user.loyaltyPoints || 0
+    });
+  } catch (err) {
+    console.error('Get profile error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Update user profile by email
+router.post('/profile', async (req, res) => {
+  const { email, name, phone, address, preferences } = req.body;
+  if (!email) return res.status(400).json({ message: 'Email required' });
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { $set: { name, phone, address, preferences } },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Profile updated', user });
+  } catch (err) {
+    console.error('Update profile error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router; 
