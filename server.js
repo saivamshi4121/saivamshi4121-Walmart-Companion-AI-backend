@@ -33,5 +33,5 @@ app.get('/api/recommendations', (req, res) => res.json(recommendations));
 app.get('/api/education', (req, res) => res.json(education));
 app.get('/api/orders', (req, res) => res.json(orders));
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
