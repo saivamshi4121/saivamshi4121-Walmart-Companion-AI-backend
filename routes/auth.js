@@ -100,4 +100,86 @@ router.post('/profile', async (req, res) => {
   }
 });
 
+// Get user cart by email
+router.get('/cart', async (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ message: 'Email required' });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ cart: user.cart || [] });
+  } catch (err) {
+    console.error('Get cart error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Update user cart by email
+router.post('/cart', async (req, res) => {
+  const { email, cart } = req.body;
+  if (!email) return res.status(400).json({ message: 'Email required' });
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { $set: { cart } },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Cart updated', cart: user.cart });
+  } catch (err) {
+    console.error('Update cart error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Clear user cart by email
+router.delete('/cart', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ message: 'Email required' });
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { $set: { cart: [] } },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Cart cleared', cart: user.cart });
+  } catch (err) {
+    console.error('Clear cart error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Place a new order for a user
+router.post('/order', async (req, res) => {
+  const { email, order } = req.body;
+  if (!email || !order) return res.status(400).json({ message: 'Email and order required' });
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { $push: { orders: order }, $set: { cart: [] } },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'Order placed', order });
+  } catch (err) {
+    console.error('Place order error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get order history for a user
+router.get('/orders', async (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ message: 'Email required' });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ orders: user.orders || [] });
+  } catch (err) {
+    console.error('Get orders error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router; 
